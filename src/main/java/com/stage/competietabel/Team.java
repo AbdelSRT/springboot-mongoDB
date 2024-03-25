@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Team {
     @Id
-    private String id;
+    private Integer id;
     @Indexed(unique = true)
     private String name;
     private Integer founded_year;
@@ -26,5 +26,9 @@ public class Team {
         this.loss = loss;
         this.draw = draw;
         this.played_games = played_games;
+    }
+
+    public Team() {
+
     }
 }
