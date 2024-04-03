@@ -34,8 +34,8 @@ public class TeamController {
 
 
     @PostMapping
-    public TeamResponse addTeam(@RequestBody String name) throws IOException {
-        return teamService.addTeam(name);
+    public TeamResponse addTeam(@RequestBody NewTeamRequest teamRequest)  {
+        return teamService.addTeam(teamRequest);
     }
 
     @DeleteMapping("/{id}")

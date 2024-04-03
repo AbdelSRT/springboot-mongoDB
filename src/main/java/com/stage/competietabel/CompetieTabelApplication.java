@@ -25,28 +25,17 @@ public class CompetieTabelApplication {
 			String name = "Sifaw United";
 			Team team = new Team(
 					name,
+					false,
 					2020,
 					"SIF",
 					"Morooco",
 					"hftc",
+					"https://sifaw-league.be/wp-content/uploads/2019/11/sifaw.png",
 					0,
 					0,
 					0,
 					0
 			);
-		/*
-			Query query = new Query();
-			query.addCriteria(Criteria.where("name").is(name));
-
-			List<Team> teams = mongoTemplate.find(query, Team.class);
-
-			if (teams.size() > 1){
-				throw new IllegalStateException("found many team with name " + name);
-			}
-
-			if (teams.isEmpty()){
-				repository.insert(team);
-			}*/
 
 			repository.findTeamByName(name)
 					.ifPresentOrElse(s -> {

@@ -12,23 +12,25 @@ public class Team {
     private String id;
     @Indexed(unique = true)
     private String name;
-    private Integer foundedYear;
+    private int foundedYear;
     private String code;
     private String country;
     private String logo;
-    private Integer wins = 0;
-    private Integer loss = 0;
-    private Integer draw = 0;
-    private Integer playedGames = 0;
+    private boolean national;
+    private int wins = 0;
+    private int loss = 0;
+    private int draw = 0;
+    private int playedGames = 0;
 
 
 
-    public Team(String name, Integer foundedYear, String code, String country, String logo, Integer wins, Integer loss, Integer draw, Integer playedGames) {
+    public Team(String name, boolean national, int foundedYear, String code, String country, String logo, String url, int wins, Integer loss, int draw, int playedGames) {
         this.name = name;
         this.foundedYear = foundedYear;
         this.code = code;
         this.country = country;
         this.logo = logo;
+        this.national = national;
         this.wins = wins;
         this.loss = loss;
         this.draw = draw;
