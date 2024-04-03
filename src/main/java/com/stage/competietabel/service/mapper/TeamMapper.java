@@ -12,7 +12,7 @@ public class TeamMapper {
         return new TeamsResponse(teams.stream().map(TeamMapper::mapTeam).collect(Collectors.toList()));
     }
     public static TeamResponse mapTeam(Team team){
-        return new TeamResponse(team.getId(), team.getName(), team.getFoundedYear(), team.getWins(), team.getLoss(), team.getDraw(), team.getPlayedGames());
+        return new TeamResponse(team.getId(), team.getName(), team.getFoundedYear(), team.getCountry(), team.getCode(), team.getLogo(), team.getWins(), team.getLoss(), team.getDraw(), team.getPlayedGames());
     }
 
 }

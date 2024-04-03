@@ -16,13 +16,19 @@ public class CompetieTabelApplication {
 	}
 
 
+
 	@Bean
 	CommandLineRunner runner(TeamRepository repository, MongoTemplate mongoTemplate){
 		return args -> {
-			String name = "Barcelona";
+
+
+			String name = "Sifaw United";
 			Team team = new Team(
 					name,
 					2020,
+					"SIF",
+					"Morooco",
+					"hftc",
 					0,
 					0,
 					0,
@@ -41,7 +47,7 @@ public class CompetieTabelApplication {
 			if (teams.isEmpty()){
 				repository.insert(team);
 			}*/
-			
+
 			repository.findTeamByName(name)
 					.ifPresentOrElse(s -> {
 						System.out.println(s + " already exist");
