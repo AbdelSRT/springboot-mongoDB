@@ -1,5 +1,7 @@
 package com.stage.competietabel.controller.dto.res;
 
-public record TeamResponse(String Id ,String name, Integer foundedYear,String code, String country, String logo, Integer wins,
-                           Integer loss, Integer draw, Integer playedGames) {
+import com.stage.competietabel.repository.model.Venue;
+
+public record TeamResponse(String Id, int api_id, String name, int foundedYear, String code, String country, String logo, boolean national, int wins,
+                           int loss, int draw, int playedGames, Venue venue) {
 }

@@ -1,15 +1,25 @@
 package com.stage.competietabel.repository.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+@Document(collection = "team-details")
 @Data
-@Document
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Team {
     @Id
     private String id;
+    private int api_id;
     @Indexed(unique = true)
     private String name;
     private int foundedYear;
@@ -21,23 +31,7 @@ public class Team {
     private int loss = 0;
     private int draw = 0;
     private int playedGames = 0;
-
-
-
-    public Team(String name, boolean national, int foundedYear, String code, String country, String logo, String url, int wins, Integer loss, int draw, int playedGames) {
-        this.name = name;
-        this.foundedYear = foundedYear;
-        this.code = code;
-        this.country = country;
-        this.logo = logo;
-        this.national = national;
-        this.wins = wins;
-        this.loss = loss;
-        this.draw = draw;
-        this.playedGames = playedGames;
-    }
-
-    public Team() {
-
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @DocumentReference(collection = "venue")
+    private Venue venue;
 }

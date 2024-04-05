@@ -35,7 +35,7 @@ public class TeamController {
 
     @PostMapping
     public TeamResponse addTeam(@RequestBody NewTeamRequest teamRequest)  {
-        return teamService.addTeam(teamRequest);
+        return teamService.addApiTeam(teamRequest);
     }
 
     @DeleteMapping("/{id}")
