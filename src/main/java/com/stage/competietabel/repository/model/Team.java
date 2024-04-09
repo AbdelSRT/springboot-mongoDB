@@ -1,6 +1,7 @@
 package com.stage.competietabel.repository.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-@Document(collection = "team-details")
+import java.util.List;
+
+@Document(collection = "teams")
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,7 +22,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 public class Team {
     @Id
     private String id;
-    private int api_id;
+    private int apiId;
     @Indexed(unique = true)
     private String name;
     private int foundedYear;
@@ -32,6 +35,9 @@ public class Team {
     private int draw = 0;
     private int playedGames = 0;
     @OneToOne(cascade = CascadeType.ALL)
-    @DocumentReference(collection = "venue")
+    @DocumentReference(collection = "venues")
     private Venue venue;
+    @OneToMany(cascade = CascadeType.ALL)
+    @DocumentReference(collection = "players")
+    private List<Player> players;
 }

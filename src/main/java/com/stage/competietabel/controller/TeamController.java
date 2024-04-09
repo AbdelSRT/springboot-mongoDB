@@ -1,8 +1,12 @@
 package com.stage.competietabel.controller;
 
 import com.stage.competietabel.controller.dto.req.UpdateTeamRequest;
+import com.stage.competietabel.controller.dto.res.PlayerResponse;
+import com.stage.competietabel.controller.dto.res.PlayersResponse;
 import com.stage.competietabel.controller.dto.res.TeamResponse;
 import com.stage.competietabel.controller.dto.res.TeamsResponse;
+import com.stage.competietabel.repository.PlayerRepository;
+import com.stage.competietabel.repository.model.Player;
 import com.stage.competietabel.repository.model.Team;
 import com.stage.competietabel.controller.dto.req.NewTeamRequest;
 import com.stage.competietabel.repository.TeamRepository;
@@ -20,7 +24,6 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
-    private final TeamRepository teamRepository;
 
     @GetMapping
     public TeamsResponse fetchAllTeams(){
@@ -46,5 +49,10 @@ public class TeamController {
     @PutMapping("/{id}")
     public void updateTeam(@PathVariable("id") String id, @RequestBody UpdateTeamRequest team){
         teamService.updateTeamRecord(id ,team);
+    }
+
+    @GetMapping("{id}/players")
+    public PlayersResponse getPlayersByTeam(@PathVariable("id") String id)  {
+        return teamService.getPlayersByTeam(id);
     }
 }

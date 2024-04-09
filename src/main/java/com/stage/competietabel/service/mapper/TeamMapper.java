@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TeamMapper {
-    public static TeamsResponse mapTeams(List<Team> teams){
+    public static TeamsResponse mapTeams(List<Team> teams) {
         return new TeamsResponse(teams.stream().map(TeamMapper::mapTeam).collect(Collectors.toList()));
     }
-    public static TeamResponse mapTeam(Team team){
-        return new TeamResponse(team.getId(), team.getApi_id(), team.getName(), team.getFoundedYear(), team.getCode(), team.getCountry(),  team.getLogo(), team.isNational(), team.getWins(), team.getLoss(), team.getDraw(), team.getPlayedGames(), team.getVenue());
+
+    public static TeamResponse mapTeam(Team team) {
+        return new TeamResponse(team.getId(), team.getApiId(), team.getName(), team.getFoundedYear(), team.getCode(), team.getCountry(), team.getLogo(), team.isNational(), team.getWins(), team.getLoss(), team.getDraw(), team.getPlayedGames(), VenueMapper.mapVenue(team.getVenue()), team.getPlayers());
     }
 }

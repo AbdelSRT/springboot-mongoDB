@@ -4,5 +4,5 @@ import com.stage.competietabel.repository.model.Player;
 
 import java.util.ArrayList;
 
-public record PlayersTeam(Player player) {
+public record PlayersTeam(ApiPlayer player) {
 }
