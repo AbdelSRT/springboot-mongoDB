@@ -1,9 +1,9 @@
 package com.stage.competietabel.repository.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.stage.competietabel.service.dto.Birth;
 import com.stage.competietabel.service.dto.TeamData;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +32,7 @@ public class Player {
     private String weight;
     private boolean injured;
     private String photo;
-    @DocumentReference(collection = "teams")
-    private Team team;
+    private int number;
+    private String position;
+    private String teamId;
 }

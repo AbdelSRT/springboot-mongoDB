@@ -26,33 +26,33 @@ public class TeamController {
     private final TeamService teamService;
 
     @GetMapping
-    public TeamsResponse fetchAllTeams(){
+    public TeamsResponse fetchAllTeams() {
         return teamService.getAllTeams();
     }
 
     @GetMapping("/{id}")
-    public TeamResponse fetchTeamById(@PathVariable("id") String id){
-        return teamService.getTeam(id);
+    public TeamResponse fetchTeamById(@PathVariable("id") String id, @RequestParam(required = false) boolean compact) {
+        return teamService.getTeam(id, compact);
     }
 
 
     @PostMapping
-    public TeamResponse addTeam(@RequestBody NewTeamRequest teamRequest)  {
+    public TeamResponse addTeam(@RequestBody NewTeamRequest teamRequest) {
         return teamService.addApiTeam(teamRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteTeam(@PathVariable("id") String id){
+    @DeleteMapping("{id}")
+    public void deleteTeam(@PathVariable("id") String id) {
         teamService.delTeam(id);
     }
 
-    @PutMapping("/{id}")
-    public void updateTeam(@PathVariable("id") String id, @RequestBody UpdateTeamRequest team){
-        teamService.updateTeamRecord(id ,team);
+    @PutMapping("{id}")
+    public void updateTeam(@PathVariable("id") String id, @RequestBody UpdateTeamRequest team) {
+        teamService.updateTeamRecord(id, team);
     }
 
     @GetMapping("{id}/players")
-    public PlayersResponse getPlayersByTeam(@PathVariable("id") String id)  {
+    public PlayersResponse getPlayersByTeam(@PathVariable("id") String id) {
         return teamService.getPlayersByTeam(id);
     }
 }

@@ -12,10 +12,7 @@ import com.stage.competietabel.repository.VenueRepository;
 import com.stage.competietabel.repository.model.Player;
 import com.stage.competietabel.repository.model.Team;
 import com.stage.competietabel.repository.model.Venue;
-import com.stage.competietabel.service.dto.PlayersTeam;
-import com.stage.competietabel.service.dto.TeamData;
-import com.stage.competietabel.service.dto.TeamRecord;
-import com.stage.competietabel.service.dto.VenueData;
+import com.stage.competietabel.service.dto.*;
 import com.stage.competietabel.service.mapper.PlayerMapper;
 import com.stage.competietabel.service.mapper.TeamMapper;
 import org.springframework.stereotype.Service;
@@ -43,9 +40,12 @@ public class TeamService {
         return TeamMapper.mapTeams(teamRepository.findAll());
     }
 
-    public TeamResponse getTeam(String id) {
+    public TeamResponse getTeam(String id, boolean compact) {
         Optional<Team> byId = teamRepository.findById(id);
-        return byId.map(TeamMapper::mapTeam).orElse(null);
+        if (byId.isPresent()) {
+            return TeamMapper.mapTeam(byId.get(), compact);
+        }
+        return null;
     }
 
 
@@ -63,16 +63,16 @@ public class TeamService {
             team.setLogo(apiTeam.logo());
             team.setNational(apiTeam.national());
             team.setVenue(addVenue(request));
-            List<Player> players = addPlayersByTeam(apiTeam.id());
-            team.setPlayers(players);
             Team savedTeam = teamRepository.save(team);
+            List<Player> players = addPlayersByTeam(savedTeam);
+            savedTeam.setPlayers(players);
+            savedTeam = teamRepository.save(savedTeam);
             System.out.println("Team added successfully: " + savedTeam.getName());
-            return TeamMapper.mapTeam(savedTeam);
+            return TeamMapper.mapTeam(savedTeam, false);
         } else {
             System.out.println("Team does not exist!" + teamRequest.name());
             return null;
         }
-
     }
 
     public Venue addVenue(TeamRecord request) {
@@ -87,12 +87,13 @@ public class TeamService {
         return venueRepository.save(venue);
     }
 
+    /*
     public ArrayList<Player> addPlayersByTeam(int teamId) {
-        ArrayList<PlayersTeam> playersTeamList = soccerProviderService.getPlayers(teamId);
+        ArrayList<PlayersTeam> playersStatsTeamList = soccerProviderService.getPlayersStats(teamId);
+        ArrayList<SecondApiPlayer> secondPlayersList = soccerProviderService.getPlayers(teamId).players();
         Team team = teamRepository.findByApiId(teamId);
         ArrayList<Player> players = new ArrayList<>();
-        System.out.println("Test" + team);
-        for (PlayersTeam playersTeam : playersTeamList) {
+        for (PlayersTeam playersTeam : playersStatsTeamList) {
             Player player = new Player();
             player.setName(playersTeam.player().name());
             player.setAge(playersTeam.player().age());
@@ -106,10 +107,47 @@ public class TeamService {
             player.setWeight(playersTeam.player().weight());
             player.setPhoto(playersTeam.player().photo());
             player.setInjured(playersTeam.player().injured());
+            Optional<SecondApiPlayer> secondPlayer = secondPlayersList.stream().filter(secondApiResponse -> secondApiResponse.id() == playersTeam.player().id()).findFirst();
+            if (secondPlayer.isPresent()) {
+                player.setNumber(secondPlayer.get().number());
+                player.setPosition(secondPlayer.get().position());
+            }
             player.setTeam(team);
             playerRepository.save(player);
             players.add(player);
         }
+        return players;
+    }
+    */
+    public ArrayList<Player> addPlayersByTeam(Team team) {
+        ArrayList<PlayersTeam> playersStatsTeamList = soccerProviderService.getPlayersStats(team.getApiId());
+        ArrayList<SecondApiPlayer> secondPlayersList = soccerProviderService.getPlayers(team.getApiId()).players();
+        ArrayList<Player> players = new ArrayList<>();
+        for (SecondApiPlayer secondPlayer : secondPlayersList) {
+            Player player = new Player();
+            player.setApiId(secondPlayer.id());
+            player.setName(secondPlayer.name());
+            player.setAge(secondPlayer.age());
+            player.setPosition(secondPlayer.position());
+            player.setPhoto(secondPlayer.photo());
+            player.setNumber(secondPlayer.number());
+            Optional<PlayersTeam> matchingPlayerStats = playersStatsTeamList.stream()
+                .filter(stats -> stats.player().id() == secondPlayer.id())
+                .findFirst();
+            if (matchingPlayerStats.isPresent()) {
+                PlayersTeam playerStats = matchingPlayerStats.get();
+                player.setFirstname(playerStats.player().firstname());
+                player.setLastname(playerStats.player().lastname());
+                player.setBirth(playerStats.player().birth());
+                player.setHeight(playerStats.player().height());
+                player.setWeight(playerStats.player().weight());
+                player.setInjured(playerStats.player().injured());
+            }
+            player.setTeamId(team.getId());
+            playerRepository.save(player);
+            players.add(player);
+        }
+
         return players;
     }
 
